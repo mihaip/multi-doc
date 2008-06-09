@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>MultiDoc Admin</title>
+</head>
+<body>
+  <h2>Add Group</h2>
+  <form method="POST" action="add_group">
+    Doctype: 
+    <select name="doctype">
+      {% for doctype in doctypes %}    
+        <option value="{{doctype.id}}">{{doctype.name}}</option>
+      {% endfor %}
+    </select><br>
+    Name: <input type="text" name="name"><br>
+    Rool URL: <input type="text" name="name"><br>
+    <input type="Submit" value="Add Group">
+  </form>
+
+  <h2>Add Entry</h2>
+  <form method="POST" action="add_entry">
+    Group:
+    <select name="group">
+      {% for group in groups %}    
+        <option value="{{group.key}}">{{group.name}}</option>
+      {% endfor %}
+    </select><br>
+    Name: <input type="text" name="name"><br>
+    Package: <input type="text" name="package"><br>
+    Type: <input type="text" name="type"><br>
+    <input type="Submit" value="Add Entry">
+  </form>
+</body>
+</html>
