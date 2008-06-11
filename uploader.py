@@ -6,6 +6,7 @@ import sys
 import tempfile
 
 sys.path.append('/usr/local/google_appengine')
+sys.path.append('/usr/local/google_appengine/lib/yaml/lib')
 
 from doctype import Doctype
 

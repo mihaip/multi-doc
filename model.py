@@ -23,60 +23,59 @@ class Group(db.Model):
   def GetDoctype(self):
     return Doctype.GetDoctypeFromId(self.doctype)
 
+_STOP_WORDS = frozenset([
+  'java', 'class', 'interface', 'enum', 'annotation'])
+
 class Entry(search.SearchableModel):
   group = db.ReferenceProperty(Group)
   
   # Class/interface/enum/etc. name
-  name = db.StringProperty()
+  name = db.BlobProperty()
   
   # Package name
-  package = db.StringProperty()
+  package = db.BlobProperty()
   
   # Class, interface, enum, etc. (group-specific)
-  type = db.CategoryProperty()
+  type = db.BlobProperty()
   
-  # Optionally, if the name and package do not tokenize well for the full-text
-  # search, additional whitespace-separated keywords may be included here
+  # To control which keywords get indexed (since we want more fine-grained 
+  # stopwords), we make all the other properties blobs, and we put in the 
+  # keywords that we actually want indexed in this property
   keywords = db.TextProperty()
   
   def Create(group, name, package, type):
     # TODO(mihaip): validation?
-    # TODO(mihaip): keywords
     
-    current_keywords = name + " " + package + " " + type
-    current_keywords = _PUNCTUATION_RE.sub(' ', current_keywords)
-    current_keywords = current_keywords.split()
-    
-    additional_keywords = []
-    for current_keyword in current_keywords:
-      # TODO(mihaip): also handle underscores?
-      
-      # Handle camel-case if we detect mixed-case
-      if not current_keyword.isupper() and not current_keyword.islower():
-
-        def AddPossibleSubKeyword(sub_keyword):
-          sub_keyword = sub_keyword.lower()
-          if sub_keyword not in current_keywords and \
-            sub_keyword not in additional_keywords:
-            additional_keywords.append(sub_keyword)
-
-      
-        start = 0
-        for camel_case_transition in _CAMEL_CASE_RE.finditer(current_keyword):
-          end = camel_case_transition.start() + 1
-          AddPossibleSubKeyword(current_keyword[start:end])
-          start = end
-        
-        if start != 0:
-          AddPossibleSubKeyword(current_keyword[start:])
-
     entry = Entry(
       group = group,
-      name = name, 
-      package = package,
-      type = db.Category(type),
-      keywords = ' '.join(additional_keywords),
+      name = str(name),
+      package = str(package),
+      type = str(type),
+      keywords = ' '.join(Entry._GetKeywords(name, package, type)),
     )
     
     return entry
   Create = staticmethod(Create)
+  
+  def _GetKeywords( name, package, type):
+    keywords = _PUNCTUATION_RE.sub(
+        ' ', name + ' ' + package + ' ' + type).split()
+    
+    # Split keywords even more 
+    for keyword in keywords:
+      # TODO(mihaip): also handle underscores?
+      
+      # Handle camel-case if we detect mixed-case
+      if not keyword.isupper() and not keyword.islower():
+
+        start = 0
+        for camel_case_transition in _CAMEL_CASE_RE.finditer(keyword):
+          end = camel_case_transition.start() + 1
+          keywords.append(keyword[start:end])
+          start = end
+        
+        if start != 0:
+          keywords.append(keyword[start:])
+          
+    return set([k.lower() for k in keywords if k.lower() not in _STOP_WORDS])
+  _GetKeywords = staticmethod(_GetKeywords)    

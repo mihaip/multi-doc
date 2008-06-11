@@ -10,5 +10,11 @@ class JsonEncoder(simplejson.JSONEncoder):
         'package': obj.package,
         'type': obj.type
       }
+    if isinstance(obj, model.Group):
+      return {
+        'name': obj.name,
+        'rootUrl': obj.root_url,
+        'id': str(obj.key()),
+      }
       
     return simplejson.JSONEncoder.default(self, obj)
