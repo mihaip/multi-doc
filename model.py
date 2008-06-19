@@ -63,7 +63,7 @@ class Entry(search.SearchableModel):
     memcache.flush_all()
     
     return entry
-  Create = staticmethod(Create)
+  CreateAndSave = staticmethod(CreateAndSave)
   
   def _GetKeywords( name, package, type):
     keywords = _PUNCTUATION_RE.sub(
