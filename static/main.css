@@ -1,0 +1,65 @@
+div, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+#search-form {
+  width: 240px;
+  padding: 5px;
+  border-right: solid 1px #ddd;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+  margin: 0;
+  padding: 0;
+}
+
+#results ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#results {
+  width: 250px;
+  border-right: solid 1px #ddd;
+  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#results h1 {
+  font-size: 16pt;
+  font-weight: bold;
+  background: #eee;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 1px 0;
+  padding: 2px;
+}
+
+#results h2 {
+  font-size: 13pt;
+  font-weight: bold;
+  border-bottom: solid 1px #eee;
+  margin-top: 0.5em;
+  padding: 2px;
+}
+
+#results .package ol li {
+  padding: 2px 0 2px 6px;
+}
+
+
+#results .entry a {
+  text-decoration: none;
+}
+
+#results .entry:hover {
+  background: #f6f6f6;
+}
+
+#results .entry:hover a {
+  text-decoration: underline;
+}

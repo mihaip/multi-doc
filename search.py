@@ -13,39 +13,48 @@ class SearchHandler(webapp.RequestHandler):
   def get(self):
     query = self.request.get('q')
   
-    results = memcache.get(query)
+    results_json = memcache.get(query)
     
-    if not results:
+    if not results_json:
       entry_query = model.Entry.all().search(query)
       
       results = self._GroupEntries(entry_query)
+      results_json = json.JsonEncoder(indent=2).encode(results)
       
-      memcache.add(query, results)
+      memcache.add(query, results_json)
     
     self.response.headers['Content-Type'] = 'text/plain'
-    self.response.out.write(json.JsonEncoder(indent=2).encode(results))
+    self.response.out.write(results_json)
 
   
   def _GroupEntries(self, entry_query):
-    """Group a flat list of entries by group and then by package"""
+    """Group a flat list of entries by group and then order by package and 
+    name"""
     
     results = []
-    entries_by_group_and_package = {}
+    entries_by_group = {}
     
     for entry in entry_query:
       group_id = str(entry.group.key())
       
-      if group_id not in entries_by_group_and_package:
-        entries_by_package = {}
+      if group_id not in entries_by_group:
+        entries = []
         results.append({
           "group": entry.group,
-          "entriesByPackage": entries_by_package,
+          "entries": entries,
         })
-        entries_by_group_and_package[group_id] = entries_by_package
+        entries_by_group[group_id] = entries
       
-      if entry.package not in entries_by_group_and_package[group_id]:
-        entries_by_group_and_package[group_id][entry.package] = []
-      entries_by_group_and_package[group_id][entry.package].append(entry)
+      entries_by_group[group_id].append(entry)
+
+    for entries in entries_by_group.values():
+      entries.sort(SearchHandler._EntryComparator)
       
     return results
   
+  def _EntryComparator(x, y):
+    package_diff = cmp(x.package, y.package)
+    if package_diff: return package_diff
+    
+    return cmp(x.name, y.name)
+  _EntryComparator = staticmethod(_EntryComparator)    
