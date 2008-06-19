@@ -47,8 +47,8 @@ def main(argv):
 /usr/local/google_appengine/tools/bulkload_client.py \\
     --filename %s \\
     --kind FetchedEntry \\
-    --cookie <admin cookie for your app> \\
-    --url http://localhost:8080/admin/bulkload""" % csv_filename
+    --url http://localhost:8080/admin/bulkload \\
+    --cookie <admin cookie for your app>""" % csv_filename
 
 if __name__ == '__main__':
   main(sys.argv[1:])
