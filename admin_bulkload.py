@@ -20,8 +20,7 @@ class EntryLoader(bulkload.Loader):
     package = entity['package']
     type = entity['type']
     
-    entry = model.Entry.Create(group, name, package, type)
-    entry.save()
+    entry = model.Entry.CreateAndSave(group, name, package, type)
 
     return None
 

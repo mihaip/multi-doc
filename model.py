@@ -2,6 +2,7 @@ import logging
 import re
 import string
 
+from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.ext import search
 
@@ -43,7 +44,7 @@ class Entry(search.SearchableModel):
   # keywords that we actually want indexed in this property
   keywords = db.TextProperty()
   
-  def Create(group, name, package, type):
+  def CreateAndSave(group, name, package, type):
     # TODO(mihaip): validation?
     
     entry = Entry(
@@ -53,6 +54,13 @@ class Entry(search.SearchableModel):
       type = str(type),
       keywords = ' '.join(Entry._GetKeywords(name, package, type)),
     )
+    
+    entry.save()
+    
+    # Since we create entries relatively rarely (and in bulk), it's OK to blow 
+    # away the whole cache instead of trying to figure out which queries need
+    # to be invalidated
+    memcache.flush_all()
     
     return entry
   Create = staticmethod(Create)

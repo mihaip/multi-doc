@@ -16,7 +16,6 @@ class AddEntryHandler(webapp.RequestHandler):
 
     doctype = group.GetDoctype()
     
-    entry = model.Entry.Create(group, name, package, type)
-    entry.save()
+    entry = model.Entry.CreateAndSave(group, name, package, type)
     
     self.redirect("/admin/")
