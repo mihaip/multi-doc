@@ -15,6 +15,7 @@ class JsonEncoder(simplejson.JSONEncoder):
         'name': obj.name,
         'rootUrl': obj.root_url,
         'id': str(obj.key()),
+        'doctype': obj.doctype,
       }
       
     return simplejson.JSONEncoder.default(self, obj)
