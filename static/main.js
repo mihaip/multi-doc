@@ -67,7 +67,10 @@ function renderResults(results) {
         
       }
       
-      var entryNode = $('<li></li>').addClass('entry').appendTo(entriesNode);
+      var entryNode = $('<li></li>')
+          .addClass('entry')
+          .addClass(group.doctype + '-' + entry.type)
+          .appendTo(entriesNode);
       var entryLinkNode = $('<a>' + entry.name + '</a>')
           .appendTo(entryNode)
           .attr('target', 'entry-frame')

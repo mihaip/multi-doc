@@ -2,7 +2,6 @@ import re
 
 from doctype import Doctype
 from doctype import FetchedEntry
-import model
 
 class JavadocDoctype(Doctype):
   _LINK_RE = re.compile(
@@ -32,6 +31,7 @@ class JavadocDoctype(Doctype):
 
       assert type in JavadocDoctype._TYPES, "unknown type %s" % type
       
+      # Interfaces have italics tags around their name, so strip that
       name_match = JavadocDoctype._NAME_HTML_RE.match(name)
       if name_match:
         name = name_match.group(1)

@@ -48,7 +48,9 @@ class FetchedEntry(object):
   
 # TOOD(mihaip): is the a better way of registering these?
 import javadoc_doctype
+import mdc_doctype
   
 _INSTANCES = [
   javadoc_doctype.JavadocDoctype(),
+  mdc_doctype.MdcDoctype(),
 ]

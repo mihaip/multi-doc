@@ -64,7 +64,6 @@ body {
   text-decoration: underline;
 }
 
-
 #entry-frame {
   position: absolute;
   top: 0;
@@ -72,4 +71,9 @@ body {
   left: 251px;
   right: 0;
   border: 0;
+}
+
+/* Doctype-specific styling */
+.javadoc-interface {
+  font-style: italic;
 }
