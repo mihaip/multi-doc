@@ -88,6 +88,20 @@ JavadocDoctype.prototype.getEntryUrl = function(group, entry) {
   return rootUrl + packagePath + '/' + entry.name + '.html';
 }
 
+function MdcDoctype() {}
+
+MdcDoctype.prototype.getEntryUrl = function(group, entry) {
+  var rootUrl = group.rootUrl;
+  var pageUrl;
+  
+  if (entry['package'] == 'CSS') {
+    pageUrl = 'CSS:' + entry.name;
+  }
+  
+  return rootUrl + pageUrl;
+}
+
 var DOCTYPES = {
-  'javadoc': new JavadocDoctype()
+  'javadoc': new JavadocDoctype(),
+  'mdc': new MdcDoctype()
 };
