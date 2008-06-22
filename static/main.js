@@ -12,6 +12,13 @@ function main() {
   if ($('#q').val()) {
     executeSearch();
   }
+  
+  // Similarly, if there's a search param in the URL, use that (to allow
+  // the site to be used a keyword bookmark)
+  if ($.query.get('q')) {
+    $('#q').val($.query.get('q'));
+    executeSearch();
+  }
 }
 
 function updateResultsHeight() {
