@@ -12,13 +12,19 @@ import model
 class SearchHandler(webapp.RequestHandler):
   def get(self):
     query = self.request.get('q')
-  
+    
     results_json = memcache.get(query)
     
     if not results_json:
-      entry_query = model.Entry.all().search(query)
-      
-      results = self._GroupEntries(entry_query)
+      # If a query is composed entirely of stop-words or is too short, App
+      # Engine ends up using an empty query, which returns all results. 
+      # Returning nothing seems more appropriate.
+      if len(query) < 3:
+        results = []
+      else:
+        entry_query = model.Entry.all().search(query)
+        results = self._GroupEntries(entry_query)
+
       results_json = json.JsonEncoder(indent=2).encode(results)
       
       memcache.add(query, results_json)
