@@ -76,6 +76,8 @@ function renderResults(results) {
       
       var entryNode = $('<li></li>')
           .addClass('entry')
+          .addClass(group.doctype)
+          .addClass(group.doctype + '-' + entry['package'])
           .addClass(group.doctype + '-' + entry.type)
           .appendTo(entriesNode);
       var entryLinkNode = $('<a>' + entry.name + '</a>')

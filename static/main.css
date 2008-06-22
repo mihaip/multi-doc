@@ -77,3 +77,7 @@ body {
 .javadoc-interface {
   font-style: italic;
 }
+
+.w3c-HTML {
+  text-transform: uppercase;
+}
