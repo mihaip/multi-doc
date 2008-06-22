@@ -108,7 +108,22 @@ MdcDoctype.prototype.getEntryUrl = function(group, entry) {
   return rootUrl + pageUrl;
 }
 
+function W3cDoctype() {}
+
+W3cDoctype.prototype.getEntryUrl = function(group, entry) {
+  var rootUrl = group.rootUrl;
+  var pageUrl;
+  
+  if (entry['package'] == 'HTML') {
+    pageUrl = '/TR/html401/index/' + entry.type + 
+        '#edef-' + entry.name.toUpperCase();
+  }
+  
+  return rootUrl + pageUrl;
+}
+
 var DOCTYPES = {
   'javadoc': new JavadocDoctype(),
-  'mdc': new MdcDoctype()
+  'mdc': new MdcDoctype(),
+  'w3c': new W3cDoctype()
 };
