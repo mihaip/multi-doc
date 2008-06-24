@@ -41,7 +41,11 @@ class SearchHandler(webapp.RequestHandler):
     entries_by_group = {}
     
     for entry in entry_query:
-      group_id = str(entry.group.key())
+      try:
+        group_id = str(entry.group.key())
+      except:
+        # Ignore orphaned entries
+        continue
       
       if group_id not in entries_by_group:
         entries = []
